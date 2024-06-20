@@ -71,9 +71,12 @@
                         {{ $headerurl }}
                     @else
                         @php
-                    $headerurl = "/roles/client"
+                        $headerurl = "/roles/client"
                         @endphp
-                        {{ $headerurl }} @endif
+                        {{ $headerurl }}
+                    @endif
+                @else
+                    
                 @endif
                 ">
                 <div id="headertext"></div>

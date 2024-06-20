@@ -6,6 +6,8 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\applicationportfolio;
+use App\Models\request_table;
+use App\Http\Controllers\HomeController;
 
 class user_postController extends Controller
 {
@@ -13,15 +15,30 @@ class user_postController extends Controller
     {
         $userpost = applicationportfolio::all();
         $result = $this->mainheader();
-
-        if (Auth::check()) {
-            return view('home', ['result' => $result]);
-        } else {
-            return view('userpost.index', ['result' => $result, 'userpost' => $userpost]);
+        $useraccounts = User::all();
+        $clientrequest = request_table::all();
+    
+        if (Auth::check())
+        {
+            if (Auth::user()->type == 'admin')
+            {
+                return view('roles.admin', ['userpost' => $userpost,'result' => $result,'useraccounts' => $useraccounts,'clientrequest' => $clientrequest]);
+            }
+            elseif (Auth::user()->type == 'user')
+            {
+                return view('home', ['userpost' => $userpost]);
+            }
+            else
+            {
+                return view('roles.client', ['userpost' => $userpost]);
+            }
         }
-
-        //  return view('roles.admin', ['userpost' => $userpost]);
+        else
+        {
+            return view('userpost.index', ['userpost' => $userpost]);
+        }
     }
+
 
     public function show(Request $request)
     {

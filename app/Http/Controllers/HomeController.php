@@ -8,6 +8,14 @@ use App\Models\applicationportfolio;
 
 use App\Models\User;
 
+use App\Models\request_table;
+
+use Auth;
+
+use Illuminate\Support\Facades\DB;
+
+
+
 class HomeController extends Controller
 {
     /**
@@ -27,14 +35,40 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        if (Auth::check())
+        {
+            if (Auth::user()->type == 'admin')
+            {
+                return view('roles.admin');
+            }
+            elseif(Auth::user()->type == 'user')
+            {
+                return view('home');
+            }
+            else
+            {
+                return view('roles.client');
+            }
+        }
+        else
+        {
+            return view('userpost.index');
+        }
+
     }
 
     public function admin()
     {
         $useraccounts = User::all();
+        $clientrequest = request_table::all();
 
-        return view('roles.admin', ['useraccounts' => $useraccounts]);
+        $usersWithOrders = DB::table('users')
+        ->join('request_tables', 'users.id', '=', 'request_tables.id')
+        ->select('users.name', 'request_tables.nameofrequest')
+        ->get();
+
+        return view('roles.admin', ['useraccounts' => $useraccounts,'clientrequest' => $clientrequest,'usersWithOrders'=>$usersWithOrders]);
     }
 
     public function update(Request $request)
@@ -70,6 +104,27 @@ class HomeController extends Controller
         // Return a redirect response
         return redirect()->back()->with('success', 'Success');
     }
+public function clientstore(Request $request)
+{
+    // For testing
+    // dd($request->post());
+
+    $data = $request->validate([
+        'nameofrequest' => 'required',
+        'docxurl' => 'required|url',
+        'status' => 'required',
+        'developer' => 'required',
+    ]);
+
+    $newpost = request_table::create($data);
+
+    // Set a session variable to indicate the modal should be opened
+    session()->flash('openModal', true);
+
+    // Return a redirect response
+    return redirect()->back()->with('success', 'Success');
+}
+
     public function client()
     {
         return view('roles.client');

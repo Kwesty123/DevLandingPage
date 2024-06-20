@@ -66,10 +66,8 @@
     </div>
 
     <div class="container">
-
         <h2>Admin Panel</h2>
         <p id="demo">This is only available for admin accounts</p>
-
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
@@ -89,16 +87,11 @@
                     aria-controls="settings" aria-selected="false">Client</a>
             </li>
         </ul>
-
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
-
                 <h3>Portfolio</h3>
                 <p>Register your portfolio here</p>
-
-
                 <form id="myForm" method="post" action="{{ route('admin.store') }}">
                     @csrf
                     @method('post')
@@ -162,7 +155,6 @@
 
             <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <br>
-
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
                     @foreach ($useraccounts as $useraccounts)
                         <div class="col mb-4">
@@ -179,7 +171,26 @@
                     @endforeach
                 </div>
             </div>
-            <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">...</div>
+            <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                <br>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                @foreach ($clientrequest as $clientrequest)
+                <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+                    <div class="card-header">{{$clientrequest->requestid}} : {{$clientrequest->nameofrequest}}</div>
+                    <div class="card-body">
+                      <h5 class="card-title">Developer: {{$clientrequest->developer}}</h5>
+                      <p class="card-text">teresquall.docx</p>
+                      <select name="cars" id="cars">
+                        <option value="volvo">Pending</option>
+                        <option value="saab">In Development</option>
+                        <option value="opel">Finish</option>
+                      </select>
+                      <button>chat</button>
+                    </div>
+                </div>
+                @endforeach
+                </div>
+            </div>
             <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
         </div>
 

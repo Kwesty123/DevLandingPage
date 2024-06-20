@@ -20,9 +20,12 @@ Route::get('welcome', [user_postController::class, 'login'])->name('userpost.log
 
 Route::put('roles/admin', [HomeController::class, 'update'])->name('account.update');
 
-// Route::get('userpost', [user_postController::class, 'index'])->name('userpost.index');
+//admin
 Route::get('roles/admin', [HomeController::class, 'create'])->name('admin.create');
 Route::post('roles/admin', [HomeController::class, 'adminstore'])->name('admin.store');
+
+//client
+Route::post('roles/client', [HomeController::class, 'clientstore'])->name('client.store');
 
 Route::get('userpost/{userpost}/edit', [user_postController::class, 'edit'])->name('userpost.edit');
 Route::put('userpost/{userpost}/update', [user_postController::class, 'update'])->name('userpost.update');
